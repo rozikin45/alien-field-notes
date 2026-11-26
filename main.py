@@ -15,6 +15,18 @@ from pathlib import Path
 
 REVIEW = "Five stars for the views, one star for the gift shop: it sells tiny models of my own ship and calls them 'UFOs.' Would visit again."
 
-output_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
-output_dir.mkdir(parents=True, exist_ok=True)
-(output_dir / "entry.txt").write_text(REVIEW, encoding="utf-8")
+MAX_CHARS = 200
+
+
+def main() -> None:
+    # Guard the competition's own rules before writing anything: the
+    # review must be exactly one line of 1-200 characters.
+    assert "\n" not in REVIEW, "review must be a single line"
+    assert 1 <= len(REVIEW) <= MAX_CHARS, f"review is {len(REVIEW)} chars, limit {MAX_CHARS}"
+    output_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
+    output_dir.mkdir(parents=True, exist_ok=True)
+    (output_dir / "entry.txt").write_text(REVIEW, encoding="utf-8")
+
+
+if __name__ == "__main__":
+    main()
